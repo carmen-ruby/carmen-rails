@@ -1,4 +1,5 @@
-require 'carmen/action_view/form_helper'
+require 'carmen/rails/action_view/form_helper'
+require 'carmen/rails/version'
 
 module Carmen
   module Rails
