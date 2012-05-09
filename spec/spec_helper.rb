@@ -7,7 +7,6 @@ require 'minitest/autorun'
 require 'action_view/test_case'
 
 require 'rails'
-require 'carmen'
 require 'carmen-rails'
 require 'ostruct'
 
