@@ -1,13 +1,12 @@
-require 'minitest/spec'
-require 'minitest/autorun'
-
 lib_path = File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift(lib_path)
 
-require 'active_support'
-require 'action_view'
-require 'action_controller'
+require 'minitest/spec'
+require 'minitest/autorun'
+
 require 'action_view/test_case'
+
+require 'rails'
 require 'carmen'
 require 'carmen-rails'
 require 'ostruct'
@@ -17,10 +16,10 @@ YAML::ENGINE.yamler = 'syck'
 
 MiniTest::Spec.register_spec_type(/.*/, ActionView::TestCase)
 
-Carmen.data_path = Carmen.root_path + '/spec/data'
-puts Carmen.data_path
+Carmen.clear_data_paths
+Carmen.append_data_path(Carmen.root_path + 'spec_data/data')
 
-locale_path = Carmen.root_path + '/spec/locale'
+locale_path = Carmen.root_path + 'spec_data/locale'
 Carmen.i18n_backend = Carmen::I18n::Simple.new(locale_path)
 
 class MiniTest::Unit::TestCase
