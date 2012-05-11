@@ -2,6 +2,8 @@
 
 Bug Fixes
 
+* Removed some 1.9 syntax taht prevented the gem from running on Ruby 1.8
+*
 Enhancements
 
 * Region select options are now sorted (lukast-akra)
