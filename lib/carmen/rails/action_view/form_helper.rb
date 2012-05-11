@@ -18,7 +18,7 @@ module ActionView
         InstanceTag.new(object, method, self, options.delete(:object)).to_region_select_tag(Carmen::World.instance, options, html_options)
       end
 
-      def region_options_for_select(parent_region, selected = nil, priority_region_codes)
+      def region_options_for_select(parent_region, priority_region_codes, selected = nil)
         region_options = ""
 
         unless priority_region_codes.empty?
@@ -33,6 +33,7 @@ module ActionView
         end
 
         main_options = parent_region.subregions.map { |r| [r.name, r.code] }
+        main_options.sort!{|a, b| a.first.unpack('U').to_s <=> b.first.unpack('U').to_s}
         region_options += options_for_select(main_options, selected)
         region_options.html_safe
       end
@@ -53,7 +54,7 @@ module ActionView
         options.stringify_keys!
         parent_region = determine_parent(parent_region_or_code)
         priority_regions = options.delete(:priority) || []
-        opts = region_options_for_select(parent_region, value, priority_regions)
+        opts = region_options_for_select(parent_region, priority_regions, value)
         html_options = {"name" => name,
                         "id" => sanitize_to_id(name)}.update(options.stringify_keys)
         content_tag(:select, opts, html_options)
@@ -81,7 +82,7 @@ module ActionView
         add_default_name_and_id(html_options)
         priority_regions = options[:priority] || []
         value = value(object)
-        opts = add_options(region_options_for_select(parent_region, value, priority_regions), options, value)
+        opts = add_options(region_options_for_select(parent_region, priority_regions, value), options, value)
         content_tag("select", opts, html_options)
       end
     end
