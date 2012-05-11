@@ -14,11 +14,23 @@ module ActionView
       # Return select and country option tags for the given object and method.
       #
       # Uses region_options_or_select to generate the list of option tags.
-      def country_select(object, method, options={}, html_options = {})
-        InstanceTag.new(object, method, self, options.delete(:object)).to_region_select_tag(Carmen::World.instance, options, html_options)
+      def country_select(object, method, options={}, html_options={})
+        tag = InstanceTag.new(object, method, self, options.delete(:object))
+        tag.to_region_select_tag(Carmen::World.instance, options, html_options)
       end
 
-      def region_options_for_select(parent_region, selected = nil, priority_region_codes)
+      # Generate option tags for the subregions of a region.
+      #
+      # To use priority regions (which are included in a special section at the
+      # top of the list), provide an array of region codes at the :priority
+      # option:
+      #
+      #   region_options_for_select(@region, 'US', priority: ['US', 'CA'])
+      #
+      # Returns an `html_safe` string containing option tags.
+      def region_options_for_select(parent_region, selected=nil, options={})
+        options.stringify_keys!
+        priority_region_codes = options['priority'] || []
         region_options = ""
 
         unless priority_region_codes.empty?
@@ -54,7 +66,7 @@ module ActionView
         options.stringify_keys!
         parent_region = determine_parent(parent_region_or_code)
         priority_regions = options.delete(:priority) || []
-        opts = region_options_for_select(parent_region, value, priority_regions)
+        opts = region_options_for_select(parent_region, value, priority: priority_regions)
         html_options = {"name" => name,
                         "id" => sanitize_to_id(name)}.update(options.stringify_keys)
         content_tag(:select, opts, html_options)
@@ -82,7 +94,7 @@ module ActionView
         add_default_name_and_id(html_options)
         priority_regions = options[:priority] || []
         value = value(object)
-        opts = add_options(region_options_for_select(parent_region, value, priority_regions), options, value)
+        opts = add_options(region_options_for_select(parent_region, value, priority: priority_regions), options, value)
         content_tag("select", opts, html_options)
       end
     end
