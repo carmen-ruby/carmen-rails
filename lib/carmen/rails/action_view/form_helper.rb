@@ -66,7 +66,7 @@ module ActionView
         options.stringify_keys!
         parent_region = determine_parent(parent_region_or_code)
         priority_regions = options.delete(:priority) || []
-        opts = region_options_for_select(parent_region, value, priority: priority_regions)
+        opts = region_options_for_select(parent_region, value, :priority => priority_regions)
         html_options = {"name" => name,
                         "id" => sanitize_to_id(name)}.update(options.stringify_keys)
         content_tag(:select, opts, html_options)
@@ -94,7 +94,7 @@ module ActionView
         add_default_name_and_id(html_options)
         priority_regions = options[:priority] || []
         value = value(object)
-        opts = add_options(region_options_for_select(parent_region, value, priority: priority_regions), options, value)
+        opts = add_options(region_options_for_select(parent_region, value, :priority => priority_regions), options, value)
         content_tag("select", opts, html_options)
       end
     end

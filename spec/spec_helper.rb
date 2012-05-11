@@ -10,9 +10,6 @@ require 'rails'
 require 'carmen-rails'
 require 'ostruct'
 
-require 'yaml'
-YAML::ENGINE.yamler = 'syck'
-
 MiniTest::Spec.register_spec_type(/.*/, ActionView::TestCase)
 
 Carmen.clear_data_paths
