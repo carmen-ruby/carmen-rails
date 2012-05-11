@@ -18,9 +18,9 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     html = country_select(@object, :country_code)
     expected = <<-HTML
       <select id="object_country_code" name="object[country_code]">
-        <option value="OC">Oceania</option>
-        <option value="EU">Eurasia</option>
         <option value="ES">Eastasia</option>
+        <option value="EU">Eurasia</option>
+        <option value="OC">Oceania</option>
       </select>
     HTML
 
@@ -37,9 +37,9 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     html = country_select_tag('attribute_name', nil)
     expected = <<-HTML
       <select id="attribute_name" name="attribute_name">
-        <option value="OC">Oceania</option>
-        <option value="EU">Eurasia</option>
         <option value="ES">Eastasia</option>
+        <option value="EU">Eurasia</option>
+        <option value="OC">Oceania</option>
       </select>
     HTML
 
@@ -57,9 +57,9 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
       <select id="object_country_code" name="object[country_code]">
         <option value="ES">Eastasia</option>
         <option disabled>-------------</option>
-        <option value="OC">Oceania</option>
-        <option value="EU">Eurasia</option>
         <option value="ES">Eastasia</option>
+        <option value="EU">Eurasia</option>
+        <option value="OC">Oceania</option>
       </select>
     HTML
 
@@ -69,7 +69,9 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
   def test_basic_subregion_select
     oceania = Carmen::Country.coded('OC')
     expected = <<-HTML
-      <select id="object_subregion_code" name="object[subregion_code]"><option value="AO">Airstrip One</option></select>
+      <select id="object_subregion_code" name="object[subregion_code]">
+        <option value="AO">Airstrip One</option>
+      </select>
     HTML
 
     html = subregion_select(@object, :subregion_code, oceania)
@@ -79,7 +81,9 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
 
   def test_subregion_select_using_parent_code
     expected = <<-HTML
-      <select id="object_subregion_code" name="object[subregion_code]"><option value="AO">Airstrip One</option></select>
+      <select id="object_subregion_code" name="object[subregion_code]">
+        <option value="AO">Airstrip One</option>
+      </select>
     HTML
 
     html = subregion_select(@object, :subregion_code, 'OC')
@@ -89,7 +93,9 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
 
   def test_subregion_select_using_parent_code_array
     expected = <<-HTML
-      <select id="object_subregion_code" name="object[subregion_code]"><option value="LO">London</option></select>
+      <select id="object_subregion_code" name="object[subregion_code]">
+        <option value="LO">London</option>
+      </select>
     HTML
 
     html = subregion_select(@object, :subregion_code, ['OC', 'AO'])
@@ -109,7 +115,9 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
   def test_basic_subregion_select
     oceania = Carmen::Country.coded('OC')
     expected = <<-HTML
-      <select id="subregion_code" name="subregion_code"><option value="AO">Airstrip One</option></select>
+      <select id="subregion_code" name="subregion_code">
+        <option value="AO">Airstrip One</option>
+      </select>
     HTML
 
     html = subregion_select_tag(:subregion_code, nil, oceania)
