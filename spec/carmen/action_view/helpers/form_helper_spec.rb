@@ -52,7 +52,7 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
   end
 
   def test_priority_country_select
-    html = country_select(@object, :country_code, {priority: ['ES']})
+    html = country_select(@object, :country_code, {:priority => ['ES']})
     expected = <<-HTML
       <select id="object_country_code" name="object[country_code]">
         <option value="ES">Eastasia</option>
