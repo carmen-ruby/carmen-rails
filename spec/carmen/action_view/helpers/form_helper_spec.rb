@@ -125,6 +125,31 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     assert_equal_markup(expected, html)
   end
 
+  def test_region_options_for_select
+    regions = Carmen::Country.all
+    expected = <<-HTML
+      <option value="ES">Eastasia</option>
+      <option value="EU">Eurasia</option>
+      <option value="OC" selected="selected">Oceania</option>
+    HTML
+    html = region_options_for_select(regions, 'OC')
+
+    assert_equal_markup(expected, html)
+  end
+
+  def test_region_options_for_select_with_array_of_regions_and_priority
+    regions = [Carmen::Country.coded('ES'), Carmen::Country.coded('EU')]
+    expected = <<-HTML
+      <option value="ES">Eastasia</option>
+      <option disabled>-------------</option>
+      <option value="ES">Eastasia</option>
+      <option value="EU">Eurasia</option>
+    HTML
+    html = region_options_for_select(regions, nil, :priority => ['ES'])
+
+    assert_equal_markup(expected, html)
+  end
+
   def method_missing(method, *args)
     fail "method_missing #{method}"
   end
