@@ -9,7 +9,7 @@ carmen-rails is a Rails 3 plugin that supplies two new form helper methods:
 Just add carmen-rails to your Gemfile:
 
 ```ruby
-gem 'carmen-rails', '1.0.0.beta3'
+gem 'carmen-rails', '~> 1.0.0.beta3'
 ```
 
 ## Usage
