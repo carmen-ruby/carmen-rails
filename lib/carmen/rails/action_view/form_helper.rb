@@ -133,10 +133,10 @@ module ActionView
       def subregion_select_tag(name, value, parent_region_or_code, options = {}, html_options = {})
         options.stringify_keys!
         parent_region = determine_parent(parent_region_or_code)
-        priority_regions = options.delete(:priority) || []
+        priority_regions = options.delete('priority') || []
         opts = region_options_for_select(parent_region.subregions, value, :priority => priority_regions)
         html_options = {"name" => name,
-                        "id" => sanitize_to_id(name)}.update(options.stringify_keys)
+                        "id" => sanitize_to_id(name)}.update(html_options.stringify_keys)
         content_tag(:select, opts, html_options)
       end
 

@@ -112,7 +112,7 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     assert_select('option[selected="selected"][value="AO"]')
   end
 
-  def test_basic_subregion_select
+  def test_basic_subregion_select_tag
     oceania = Carmen::Country.coded('OC')
     expected = <<-HTML
       <select id="subregion_code" name="subregion_code">
@@ -121,6 +121,21 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     HTML
 
     html = subregion_select_tag(:subregion_code, nil, oceania)
+
+    assert_equal_markup(expected, html)
+  end
+
+  def test_subregion_select_tag_with_priority
+    oceania = Carmen::Country.coded('OC')
+    expected = <<-HTML
+      <select id="subregion_code" name="subregion_code">
+        <option value="AO">Airstrip One</option>
+        <option disabled>-------------</option>
+        <option value="AO">Airstrip One</option>
+      </select>
+    HTML
+
+    html = subregion_select_tag(:subregion_code, nil, oceania, :priority => ['AO'])
 
     assert_equal_markup(expected, html)
   end
