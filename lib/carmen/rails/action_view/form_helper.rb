@@ -85,7 +85,7 @@ module ActionView
         end
 
         main_options = regions.map { |r| [r.name, r.code] }
-        main_options.sort!{|a, b| a.first.unpack('U').to_s <=> b.first.unpack('U').to_s}
+        main_options.sort!{|a, b| a.first.to_s <=> b.first.to_s}
         region_options += options_for_select(main_options, selected)
         region_options.html_safe
       end
