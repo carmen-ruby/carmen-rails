@@ -66,6 +66,21 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     assert_equal_markup(expected, html)
   end
 
+  def test_priority_country_select_deprecated_api
+    html = country_select(@object, :country_code, ['ES'], {})
+    expected = <<-HTML
+      <select id="object_country_code" name="object[country_code]">
+        <option value="ES">Eastasia</option>
+        <option disabled>-------------</option>
+        <option value="ES">Eastasia</option>
+        <option value="EU">Eurasia</option>
+        <option value="OC">Oceania</option>
+      </select>
+    HTML
+
+    assert_equal_markup(expected, html)
+  end
+
   def test_basic_subregion_select
     oceania = Carmen::Country.coded('OC')
     expected = <<-HTML
@@ -161,6 +176,38 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
       <option value="EU">Eurasia</option>
     HTML
     html = region_options_for_select(regions, nil, :priority => ['ES'])
+
+    assert_equal_markup(expected, html)
+  end
+
+  def test_form_builder_country_select
+    form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, ->{})
+
+    html = form.country_select('attribute_name')
+    expected = <<-HTML
+      <select id="object_attribute_name" name="object[attribute_name]">
+        <option value="ES">Eastasia</option>
+        <option value="EU">Eurasia</option>
+        <option value="OC">Oceania</option>
+      </select>
+    HTML
+
+    assert_equal_markup(expected, html)
+  end
+
+  def test_form_builder_country_select_deprecated_api
+    form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, ->{})
+
+    html = form.country_select('attribute_name', ['ES'])
+    expected = <<-HTML
+      <select id="object_attribute_name" name="object[attribute_name]">
+        <option value="ES">Eastasia</option>
+        <option disabled>-------------</option>
+        <option value="ES">Eastasia</option>
+        <option value="EU">Eurasia</option>
+        <option value="OC">Oceania</option>
+      </select>
+    HTML
 
     assert_equal_markup(expected, html)
   end

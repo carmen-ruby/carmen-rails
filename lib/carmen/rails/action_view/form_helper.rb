@@ -45,9 +45,24 @@ module ActionView
       #
       #   country_select(@object, :region, {priority: ['US', 'CA']}, class: 'region')
       #
+      # Note that in order to preserve compatibility with various existing
+      # libraries, an alternative API is supported but not recommended:
+      #
+      #   country_select(@object, :region, ['US', 'CA'], class: region)
+      #
       # Returns an `html_safe` string containing the HTML for a select element.
-      def country_select(object, method, options={}, html_options={})
-        tag = InstanceTag.new(object, method, self, options.delete(:object))
+      def country_select(object, method, *args)
+
+        # These contortions are to provide API-compatibility
+        priority_countries = args.shift if args.first.is_a?(Array)
+        options, html_options = args
+
+        options ||= {}
+        options[:priority] = priority_countries if priority_countries
+
+        html_options ||= {}
+
+        tag = InstanceTag.new(object, method, self)
         tag.to_region_select_tag(Carmen::World.instance, options, html_options)
       end
 
@@ -157,7 +172,7 @@ module ActionView
     end
 
     class InstanceTag
-      def to_region_select_tag(parent_region, options, html_options)
+      def to_region_select_tag(parent_region, options = {}, html_options = {})
         html_options = html_options.stringify_keys
         add_default_name_and_id(html_options)
         priority_regions = options[:priority] || []
@@ -173,9 +188,8 @@ module ActionView
       # web form.
       #
       # See `FormOptionsHelper::country_select` for more information.
-      def country_select(method, options = {}, html_options = {})
-        @template.country_select(@object_name, method,
-                                 options.merge(:object => @object), html_options)
+      def country_select(method, *args)
+        @template.country_select(@object_name, method, *args)
       end
 
       # Generate select and subregion option tags with the provided name. A
@@ -183,9 +197,8 @@ module ActionView
       # a given country.
       #
       # See `FormOptionsHelper::subregion_select` for more information.
-      def subregion_select(method, parent_region_or_code, options={}, html_options={})
-        @template.subregion_select(@object_name, method, parent_region_or_code,
-                                   options.merge(:object => @object), html_options)
+      def subregion_select(method, parent_region_or_code, *args)
+        @template.subregion_select(@object_name, method, parent_region_or_code, *args)
       end
     end
 
