@@ -181,7 +181,7 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
   end
 
   def test_form_builder_country_select
-    form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, ->{})
+    form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, lambda{})
 
     html = form.country_select('attribute_name')
     expected = <<-HTML
@@ -196,7 +196,7 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
   end
 
   def test_form_builder_country_select_deprecated_api
-    form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, ->{})
+    form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, lambda{})
 
     html = form.country_select('attribute_name', ['ES'])
     expected = <<-HTML
