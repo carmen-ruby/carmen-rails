@@ -50,3 +50,13 @@ carmen-rails [have been thoroughly TomDoc'ed](https://github.com/jim/carmen-rail
 
 There is a [live demo app](http://carmen-rails-demo.herokuapp.com) that shows
 carmen-rails in action, and includes a [step-by-step setup guide](https://github.com/jim/carmen-demo-app#readme).
+
+## Configuration
+
+Using this library will automatically set Carmen to use [Rails' built-in I18n functionality](http://guides.rubyonrails.org/i18n.html). This means that changing
+some configuration should be done through Rails and not Carmen. For example, adding paths for additional locale files
+should be done inside `config/application.rb`:
+
+``` ruby
+config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
+```
