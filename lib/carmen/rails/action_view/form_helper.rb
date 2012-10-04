@@ -101,6 +101,8 @@ module ActionView
 
         main_options = regions.map { |r| [r.name, r.code] }
         main_options.sort!{|a, b| a.first.to_s <=> b.first.to_s}
+        main_options.unshift [options['prompt'], ''] if options['prompt']
+
         region_options += options_for_select(main_options, selected)
         region_options.html_safe
       end
@@ -148,8 +150,7 @@ module ActionView
       def subregion_select_tag(name, value, parent_region_or_code, options = {}, html_options = {})
         options.stringify_keys!
         parent_region = determine_parent(parent_region_or_code)
-        priority_regions = options.delete('priority') || []
-        opts = region_options_for_select(parent_region.subregions, value, :priority => priority_regions)
+        opts = region_options_for_select(parent_region.subregions, value, options)
         html_options = {"name" => name,
                         "id" => sanitize_to_id(name)}.update(html_options.stringify_keys)
         content_tag(:select, opts, html_options)

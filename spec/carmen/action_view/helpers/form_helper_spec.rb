@@ -46,13 +46,26 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     assert_equal_markup(expected, html)
   end
 
+  def test_country_select_tag_with_prompt
+    html = country_select_tag('attribute_name', nil, :prompt => 'Please Select')
+    expected = <<-HTML
+      <select id="attribute_name" name="attribute_name">
+        <option value="">Please Select</option>
+        <option value="ES">Eastasia</option>
+        <option value="EU">Eurasia</option>
+        <option value="OC">Oceania</option>
+      </select>
+    HTML
+
+    assert_equal_markup(expected, html)
+  end
   def test_country_tag_selected_value
     @html = country_select_tag(:country_code, 'OC')
     assert_select('option[selected="selected"][value="OC"]')
   end
 
   def test_priority_country_select
-    html = country_select(@object, :country_code, {:priority => ['ES']})
+    html = country_select(@object, :country_code, :priority => ['ES'])
     expected = <<-HTML
       <select id="object_country_code" name="object[country_code]">
         <option value="ES">Eastasia</option>
@@ -155,6 +168,20 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     assert_equal_markup(expected, html)
   end
 
+  def test_subregion_select_tag_with_prompt
+    oceania = Carmen::Country.coded('OC')
+    expected = <<-HTML
+      <select id="subregion_code" name="subregion_code">
+        <option value="">Please select</option>
+        <option value="AO">Airstrip One</option>
+      </select>
+    HTML
+
+    html = subregion_select_tag(:subregion_code, nil, oceania, :prompt => 'Please select')
+
+    assert_equal_markup(expected, html)
+  end
+
   def test_region_options_for_select
     regions = Carmen::Country.all
     expected = <<-HTML
@@ -210,9 +237,5 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     HTML
 
     assert_equal_markup(expected, html)
-  end
-
-  def method_missing(method, *args)
-    fail "method_missing #{method}"
   end
 end
