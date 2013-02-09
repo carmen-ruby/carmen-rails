@@ -172,7 +172,7 @@ module ActionView
       end
     end
 
-    class InstanceTag
+    class InstanceTag < ActionView::Helpers::Tags::Base
       def to_region_select_tag(parent_region, options = {}, html_options = {})
         html_options = html_options.stringify_keys
         add_default_name_and_id(html_options)
