@@ -171,12 +171,12 @@ module ActionView
         end
       end
     end
-    
-    if Rails.version > '4'
+
+    if Rails.version.to_s > '4'
       class InstanceTag < ActionView::Helpers::Tags::Base
       end
     end
-    
+
     class InstanceTag
       def to_region_select_tag(parent_region, options = {}, html_options = {})
         html_options = html_options.stringify_keys
