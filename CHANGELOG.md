@@ -1,5 +1,11 @@
 ### HEAD
 
+### 1.0.0
+
+Updates
+
+* Push from beta to 1.0.0 final.  
+
 ### 1.0.0.beta 3
 
 Bug Fixes
