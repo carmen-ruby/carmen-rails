@@ -13,7 +13,7 @@ carmen-rails requires Ruby 1.9.2 or greater.
 Just add carmen-rails to your Gemfile:
 
 ```ruby
-gem 'carmen-rails', '~> 1.0.0.beta3'
+gem 'carmen-rails', '~> 1.0.0'
 ```
 
 ## Usage
