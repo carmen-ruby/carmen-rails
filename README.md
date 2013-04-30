@@ -15,7 +15,6 @@ Just add carmen-rails to your Gemfile:
 ```ruby
 gem 'carmen-rails', '~> 1.0.0'
 ```
-
 ## Usage
 
 ```erb
@@ -26,6 +25,19 @@ gem 'carmen-rails', '~> 1.0.0'
   </div>
 <% end %>
 ```
+
+#### SimpleForm
+Pass the object to the country_select helper. This ensures the persisted country is selected when the form is rendered. 
+
+```erb
+<%= simple_form_for @user do |f| %>
+  <%= f.input :country_code do %>
+    <%= f.country_select :country_code, {object: f.object, prompt: 'Country'} %>
+  <% end %>
+<% end %>
+```
+
+Passing the object is necessary when using nested form fields with Formtastic.
 
 ## How do I only display a subset of countries/regions?
 
