@@ -15,7 +15,7 @@ module ActionView
       # html_options - Options to use when generating the select tag- class,
       #                id, etc.
       #
-      # Uses region_options_or_select to generate the list of option tags.
+      # Uses region_options_for_select to generate the list of option tags.
       #
       # Example:
       #
