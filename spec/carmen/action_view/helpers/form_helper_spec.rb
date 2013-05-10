@@ -136,10 +136,25 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     oceania = Carmen::Country.coded('OC')
 
     @html = subregion_select(@object, :subregion_code, oceania)
-
     assert_select('option[selected="selected"][value="AO"]')
   end
 
+  def test_subregion_selected_value_with_priority_and_selected_options
+    @object.subregion_code = 'AO'
+    oceania = Carmen::Country.coded('OC')
+    @html = subregion_select(@object, :subregion_code, oceania, { priority: ['AO'], selected: 'AO' })
+
+    assert_select('option[selected="selected"][value="AO"]')  
+  end
+
+  def test_html_options_for_selected_value_with_priority_and_selected_options
+    @object.subregion_code = 'AO'
+    oceania = Carmen::Country.coded('OC')
+    @html = subregion_select(@object, :subregion_code, oceania, { priority: ['AO'], selected: 'AO' }, { class: :test_html_options})
+
+    assert_select('.test_html_options')
+  end
+  
   def test_basic_subregion_select_tag
     oceania = Carmen::Country.coded('OC')
     expected = <<-HTML
@@ -238,4 +253,5 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
 
     assert_equal_markup(expected, html)
   end
+  
 end
