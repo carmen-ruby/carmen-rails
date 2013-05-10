@@ -222,6 +222,21 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     assert_equal_markup(expected, html)
   end
 
+  def test_region_options_for_select_with_multiple_groups_of_priority
+    html = region_options_for_select(Carmen::Country.all, nil, priority: [['ES'], ['EU']])
+      expected = <<-HTML
+        <option value="ES">Eastasia</option>
+        <option disabled>-------------</option>
+        <option value="EU">Eurasia</option>
+        <option disabled>-------------</option>
+        <option value="ES">Eastasia</option>
+        <option value="EU">Eurasia</option>
+        <option value="OC">Oceania</option>
+      HTML
+
+      assert_equal_markup(expected, html)
+  end
+
   def test_form_builder_country_select
     form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, lambda{})
 

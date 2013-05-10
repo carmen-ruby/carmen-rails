@@ -88,14 +88,16 @@ module ActionView
           unless regions.respond_to?(:coded)
             regions = Carmen::RegionCollection.new(regions)
           end
-
-          priority_regions = priority_region_codes.map do |code|
-            region = regions.coded(code)
-            [region.name, region.code] if region
-          end.compact
-          unless priority_regions.empty?
-            region_options += options_for_select(priority_regions, selected)
-            region_options += "<option disabled>-------------</option>"
+          priority_region_codes = [priority_region_codes] unless priority_region_codes.first.is_a?(Array)
+          priority_region_codes.each do |prc|
+            priority_regions = prc.map do |code|
+              region = regions.coded(code)
+              [region.name, region.code] if region
+            end.compact
+            unless priority_regions.empty?
+              region_options += options_for_select(priority_regions, selected)
+              region_options += "<option disabled>-------------</option>"
+            end
           end
         end
 
