@@ -21,7 +21,7 @@ gem 'carmen-rails', '~> 1.0.0'
 <%= form_for(@order) do |f| %>
   <div class="field">
     <%= f.label :country_code %><br />
-    <%= f.country_select :country_code, {priority: %w(US CA)}, prompt: 'Please select a country' %>
+    <%= f.country_select :country_code, {priority: %w(US CA), prompt: 'Please select a country'} %>
   </div>
 <% end %>
 ```
