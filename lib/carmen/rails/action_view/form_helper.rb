@@ -83,8 +83,6 @@ module ActionView
         options.stringify_keys!
         priority_region_codes = options['priority'] || []
         region_options = ""
-        Rails.logger.debug('selectedddd')
-        Rails.logger.debug(selected)
 
         unless priority_region_codes.empty?
           unless regions.respond_to?(:coded)
