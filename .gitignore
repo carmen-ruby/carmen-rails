@@ -1,4 +1,5 @@
 .bundle/
 log/*.log
 pkg/
+Gemfile.lock
 .DS_Store

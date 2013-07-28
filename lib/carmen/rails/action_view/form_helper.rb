@@ -24,7 +24,7 @@ module ActionView
       # Returns an `html_safe` string containing the HTML for a select element.
       def subregion_select(object, method, parent_region_or_code, options={}, html_options={})
         parent_region = determine_parent(parent_region_or_code)
-        tag = InstanceTag.new(object, method, self, options.delete(:object))
+        tag = instance_tag(object, method, self, options.delete(:object))
         tag.to_region_select_tag(parent_region, options, html_options)
       end
 
@@ -62,7 +62,7 @@ module ActionView
 
         html_options ||= {}
 
-        tag = InstanceTag.new(object, method, self, options.delete(:object))
+        tag = instance_tag(object, method, self, options.delete(:object))
         tag.to_region_select_tag(Carmen::World.instance, options, html_options)
       end
 
@@ -158,6 +158,15 @@ module ActionView
 
       private
 
+      def instance_tag(object_name, method_name, template_object, options = {})
+        if Rails::VERSION::MAJOR == 3
+          InstanceTag.new(object_name, method_name, template_object, options)
+        else
+          ActionView::Helpers::Tags::Base.new(object_name, method_name, template_object, options || {})
+        end
+      end
+
+
       def determine_parent(parent_region_or_code)
         case parent_region_or_code
         when String
@@ -172,14 +181,41 @@ module ActionView
       end
     end
 
-    class InstanceTag
-      def to_region_select_tag(parent_region, options = {}, html_options = {})
-        html_options = html_options.stringify_keys
-        add_default_name_and_id(html_options)
-        priority_regions = options[:priority] || []
-        value = options[:selected] ? options[:selected] : value(object)
-        opts = add_options(region_options_for_select(parent_region.subregions, value, :priority => priority_regions), options, value)
-        content_tag("select", opts, html_options)
+    if Rails::VERSION::MAJOR == 3
+      class InstanceTag
+        def to_region_select_tag(parent_region, options = {}, html_options = {})
+          html_options = html_options.stringify_keys
+          add_default_name_and_id(html_options)
+          priority_regions = options[:priority] || []
+          value = options[:selected] ? options[:selected] : value(object)
+          opts = add_options(region_options_for_select(parent_region.subregions, value, :priority => priority_regions), options, value)
+          content_tag("select", opts, html_options)
+        end
+      end
+    end
+
+    if Rails::VERSION::MAJOR == 4
+      module Tags
+        class Base
+          def to_region_select_tag(parent_region, options = {}, html_options = {})
+            html_options = html_options.stringify_keys
+            add_default_name_and_id(html_options)
+            options[:include_blank] ||= true unless options[:prompt] || select_not_required?(html_options)
+
+            value = options[:selected] ? options[:selected] : value(object)
+            priority_regions = options[:priority] || []
+            opts = add_options(region_options_for_select(parent_region.subregions, value, 
+                                                        :priority => priority_regions), 
+                               options, value)
+            select = content_tag("select", opts, html_options)
+            if html_options["multiple"] && options.fetch(:include_hidden, true)
+              tag("input", :disabled => html_options["disabled"], :name => html_options["name"], 
+                           :type => "hidden", :value => "") + select
+            else
+              select
+            end
+          end
+        end
       end
     end
 

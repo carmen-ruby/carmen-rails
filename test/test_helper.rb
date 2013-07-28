@@ -1,8 +1,8 @@
 lib_path = File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift(lib_path)
 
-require 'minitest/spec'
 require 'minitest/autorun'
+require 'minitest/spec'
 
 require 'action_view/test_case'
 

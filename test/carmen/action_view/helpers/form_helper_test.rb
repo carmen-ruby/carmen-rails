@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'test_helper'
 
 class CarmenViewHelperTest < MiniTest::Unit::TestCase
   include ActionView::Helpers::FormOptionsHelper
@@ -199,11 +199,19 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
 
   def test_region_options_for_select
     regions = Carmen::Country.all
-    expected = <<-HTML
-      <option value="ES">Eastasia</option>
-      <option value="EU">Eurasia</option>
-      <option value="OC" selected="selected">Oceania</option>
-    HTML
+    if Rails::VERSION::MAJOR == 3
+      expected = <<-HTML
+        <option value="ES">Eastasia</option>
+        <option value="EU">Eurasia</option>
+        <option value="OC" selected="selected">Oceania</option>
+      HTML
+    else
+      expected = <<-HTML
+        <option value="ES">Eastasia</option>
+        <option value="EU">Eurasia</option>
+        <option selected="selected" value="OC">Oceania</option>
+      HTML
+    end
     html = region_options_for_select(regions, 'OC')
 
     assert_equal_markup(expected, html)
