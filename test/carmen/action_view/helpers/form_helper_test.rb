@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'test_helper'
 
 class CarmenViewHelperTest < MiniTest::Unit::TestCase
   include ActionView::Helpers::FormOptionsHelper
