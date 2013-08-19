@@ -112,6 +112,7 @@ module ActionView
       # inside a web form.
       #
       # name         - The name attribute for the select element.
+      # value        - An instance of Carmen::Region or 2-Character country code.
       # options      - Other options pertaining to option tag generation. See
       #                `region_options_for_select`.
       # html_options - Options to use when generating the select tag- class,
@@ -121,7 +122,7 @@ module ActionView
       #
       # Example:
       #
-      #   country_select_tag('country_code', {priority: ['US', 'CA']}, class: 'region')
+      #   country_select_tag('country_code', 'US', {priority: ['US', 'CA']}, class: 'region')
       #
       # Returns an `html_safe` string containing the HTML for a select element.
       def country_select_tag(name, value, options={}, html_options={})
