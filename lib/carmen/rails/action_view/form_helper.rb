@@ -24,7 +24,7 @@ module ActionView
       # Returns an `html_safe` string containing the HTML for a select element.
       def subregion_select(object, method, parent_region_or_code, options={}, html_options={})
         parent_region = determine_parent(parent_region_or_code)
-        tag = instance_tag(object, method, self, options.delete(:object))
+        tag = instance_tag(object, method, self, options)
         tag.to_region_select_tag(parent_region, options, html_options)
       end
 
