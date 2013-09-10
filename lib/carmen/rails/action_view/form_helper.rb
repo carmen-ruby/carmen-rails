@@ -62,7 +62,7 @@ module ActionView
 
         html_options ||= {}
 
-        tag = instance_tag(object, method, self, options.delete(:object))
+        tag = instance_tag(object, method, self, options)
         tag.to_region_select_tag(Carmen::World.instance, options, html_options)
       end
 
