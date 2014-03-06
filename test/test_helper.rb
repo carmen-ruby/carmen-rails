@@ -13,9 +13,12 @@ require 'ostruct'
 MiniTest::Spec.register_spec_type(/.*/, ActionView::TestCase)
 
 Carmen.clear_data_paths
-Carmen.append_data_path(Carmen.root_path + 'spec_data/data')
 
-locale_path = Carmen.root_path + 'spec_data/locale'
+carmen_path = File.expand_path('../../../carmen', __FILE__)
+
+Carmen.append_data_path(carmen_path + '/spec_data/data')
+
+locale_path = carmen_path + '/spec_data/locale'
 Carmen.i18n_backend = Carmen::I18n::Simple.new(locale_path)
 
 class MiniTest::Unit::TestCase
