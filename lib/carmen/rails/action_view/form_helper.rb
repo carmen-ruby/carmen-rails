@@ -94,6 +94,11 @@ module ActionView
           unless priority_regions.empty?
             region_options += options_for_select(priority_regions, selected)
             region_options += "<option disabled>-------------</option>"
+
+            # If a priority region is selected, don't select it again in the main list.
+            # This prevents some browsers from selecting the second occurance of this region,
+            # which makes it difficult to select an alternative priority region.
+            selected = nil if priority_region_codes.include?(selected)
           end
         end
 

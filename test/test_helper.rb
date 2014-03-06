@@ -29,6 +29,12 @@ class MiniTest::Unit::TestCase
   private
 
   def clean_markup(markup)
+    clean_whitespace(markup).gsub(/( [a-zA-Z_]*="[^"]*")+/) do |match|
+      ' ' + match.strip!.split(' ').sort.join(' ')
+    end
+  end
+
+  def clean_whitespace(markup)
     markup.
       gsub(/\s+/, ' ').    # cleanup whitespace
       gsub(/>\s/, '>').    # kill space after tags

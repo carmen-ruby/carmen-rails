@@ -101,6 +101,23 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     assert_equal_markup(expected, html)
   end
 
+  def test_country_select_selected_priority_region_not_selected_twice
+    @object.country_code = 'ES'
+
+    html = country_select(@object, :country_code, :priority => ['ES'])
+    expected = <<-HTML
+      <select id="object_country_code" name="object[country_code]">
+        <option value="ES" selected="selected">Eastasia</option>
+        <option disabled>-------------</option>
+        <option value="ES">Eastasia</option>
+        <option value="EU">Eurasia</option>
+        <option value="OC">Oceania</option>
+      </select>
+    HTML
+
+    assert_equal_markup(expected, html)
+  end
+
   def test_basic_subregion_select
     oceania = Carmen::Country.coded('OC')
     expected = <<-HTML
