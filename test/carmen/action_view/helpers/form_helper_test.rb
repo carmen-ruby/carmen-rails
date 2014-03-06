@@ -33,6 +33,14 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     assert_select('option[selected="selected"][value="OC"]')
   end
 
+  def test_country_selected_object_option
+    @object.country_code = 'OC'
+    override_object = OpenStruct.new(:country_code => 'ES')
+    @html = country_select(@object, :country_code, {:object => override_object})
+
+    assert_select('option[selected="selected"][value="ES"]')
+  end
+
   def test_basic_country_select_tag
     html = country_select_tag('attribute_name', nil)
     expected = <<-HTML
