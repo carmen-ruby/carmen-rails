@@ -51,16 +51,14 @@ module ActionView
       #   country_select(@object, :region, ['US', 'CA'], class: region)
       #
       # Returns an `html_safe` string containing the HTML for a select element.
-      def country_select(object, method, *args)
-
-        # These contortions are to provide API-compatibility
-        priority_countries = args.shift if args.first.is_a?(Array)
-        options, html_options = args
-
-        options ||= {}
-        options[:priority] = priority_countries if priority_countries
-
-        html_options ||= {}
+      def country_select(object, method, priorities_or_options = {}, options_or_html_options = {}, html_options = {})
+        if priorities_or_options.is_a? Array
+          options = options_or_html_options
+          options[:priority] = priorities_or_options
+        else
+          options = priorities_or_options
+          html_options = options_or_html_options
+        end
 
         tag = instance_tag(object, method, self, options)
         tag.to_region_select_tag(Carmen::World.instance, options, html_options)
@@ -225,8 +223,16 @@ module ActionView
       # web form.
       #
       # See `FormOptionsHelper::country_select` for more information.
-      def country_select(method, *args)
-        @template.country_select(@object_name, method, *args)
+      def country_select(method, priorities_or_options = {}, options_or_html_options = {}, html_options = {})
+        if priorities_or_options.is_a? Array
+          options = options_or_html_options
+          options[:priority] = priorities_or_options
+        else
+          options = priorities_or_options
+          html_options = options_or_html_options
+        end
+
+        @template.country_select(@object_name, method, objectify_options(options), @default_options.merge(html_options))
       end
 
       # Generate select and subregion option tags with the provided name. A
@@ -234,8 +240,8 @@ module ActionView
       # a given country.
       #
       # See `FormOptionsHelper::subregion_select` for more information.
-      def subregion_select(method, parent_region_or_code, *args)
-        @template.subregion_select(@object_name, method, parent_region_or_code, *args)
+      def subregion_select(method, parent_region_or_code, options = {}, html_options = {})
+        @template.subregion_select(@object_name, method, parent_region_or_code, objectify_options(options), @default_options.merge(html_options))
       end
     end
 

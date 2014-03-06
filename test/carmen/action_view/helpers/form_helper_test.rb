@@ -15,7 +15,7 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
   end
 
   def test_basic_country_select
-    html = country_select(@object, :country_code)
+    html = country_select(:object, :country_code)
     expected = <<-HTML
       <select id="object_country_code" name="object[country_code]">
         <option value="ES">Eastasia</option>
@@ -28,8 +28,7 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
   end
 
   def test_country_selected_value
-    @object.country_code = 'OC'
-    @html = country_select(@object, :country_code)
+    @html = country_select(:object, :country_code, :selected => 'OC')
     assert_select('option[selected="selected"][value="OC"]')
   end
 
@@ -73,7 +72,7 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
   end
 
   def test_priority_country_select
-    html = country_select(@object, :country_code, :priority => ['ES'])
+    html = country_select(:object, :country_code, :priority => ['ES'])
     expected = <<-HTML
       <select id="object_country_code" name="object[country_code]">
         <option value="ES">Eastasia</option>
@@ -88,7 +87,7 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
   end
 
   def test_priority_country_select_deprecated_api
-    html = country_select(@object, :country_code, ['ES'], {})
+    html = country_select(:object, :country_code, ['ES'], {})
     expected = <<-HTML
       <select id="object_country_code" name="object[country_code]">
         <option value="ES">Eastasia</option>
@@ -110,7 +109,7 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
       </select>
     HTML
 
-    html = subregion_select(@object, :subregion_code, oceania)
+    html = subregion_select(:object, :subregion_code, oceania)
 
     assert_equal_markup(expected, html)
   end
@@ -122,7 +121,7 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
       </select>
     HTML
 
-    html = subregion_select(@object, :subregion_code, 'OC')
+    html = subregion_select(:object, :subregion_code, 'OC')
 
     assert_equal_markup(expected, html)
   end
@@ -134,35 +133,32 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
       </select>
     HTML
 
-    html = subregion_select(@object, :subregion_code, ['OC', 'AO'])
+    html = subregion_select(:object, :subregion_code, ['OC', 'AO'])
 
     assert_equal_markup(expected, html)
   end
 
   def test_subregion_selected_value
-    @object.subregion_code = 'AO'
     oceania = Carmen::Country.coded('OC')
 
-    @html = subregion_select(@object, :subregion_code, oceania)
+    @html = subregion_select(:object, :subregion_code, oceania, :selected => 'AO')
     assert_select('option[selected="selected"][value="AO"]')
   end
 
   def test_subregion_selected_value_with_priority_and_selected_options
-    @object.subregion_code = 'AO'
     oceania = Carmen::Country.coded('OC')
-    @html = subregion_select(@object, :subregion_code, oceania, { priority: ['AO'], selected: 'AO' })
+    @html = subregion_select(:object, :subregion_code, oceania, { priority: ['AO'], selected: 'AO' })
 
-    assert_select('option[selected="selected"][value="AO"]')  
+    assert_select('option[selected="selected"][value="AO"]')
   end
 
   def test_html_options_for_selected_value_with_priority_and_selected_options
-    @object.subregion_code = 'AO'
     oceania = Carmen::Country.coded('OC')
-    @html = subregion_select(@object, :subregion_code, oceania, { priority: ['AO'], selected: 'AO' }, { class: :test_html_options})
+    @html = subregion_select(:object, :subregion_code, oceania, { priority: ['AO'], selected: 'AO' }, { class: :test_html_options})
 
     assert_select('.test_html_options')
   end
-  
+
   def test_basic_subregion_select_tag
     oceania = Carmen::Country.coded('OC')
     expected = <<-HTML
@@ -253,6 +249,14 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     assert_equal_markup(expected, html)
   end
 
+  def test_form_builder_selected_country
+    @object.country_code = 'OC'
+    form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, lambda{})
+    @html = form.country_select('country_code')
+
+    assert_select('option[selected="selected"][value="OC"]')
+  end
+
   def test_form_builder_country_select_deprecated_api
     form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, lambda{})
 
@@ -269,5 +273,24 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
 
     assert_equal_markup(expected, html)
   end
-  
+
+  def test_form_builder_subregion_select
+    form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, lambda{})
+    html = form.subregion_select(:subregion_code, 'OC')
+    expected = <<-HTML
+      <select id="object_subregion_code" name="object[subregion_code]">
+        <option value="AO">Airstrip One</option>
+      </select>
+    HTML
+
+    assert_equal_markup(expected, html)
+  end
+
+  def test_form_builder_selected_subregion
+    @object.subregion_code = 'AO'
+    form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, lambda{})
+    @html = form.subregion_select(:subregion_code, 'OC')
+
+    assert_select('option[selected="selected"][value="AO"]')
+  end
 end
