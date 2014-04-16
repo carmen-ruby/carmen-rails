@@ -127,8 +127,8 @@ module ActionView
       #   country_select_tag('country_code', {priority: ['US', 'CA']}, class: 'region')
       #
       # Returns an `html_safe` string containing the HTML for a select element.
-      def country_select_tag(name, value, options={})
-        subregion_select_tag(name, value, Carmen::World.instance, options)
+      def country_select_tag(name, value, options={}, html_options={})
+        subregion_select_tag(name, value, Carmen::World.instance, options, html_options)
       end
 
       # Generate select and subregion option tags for the given object and method. A
