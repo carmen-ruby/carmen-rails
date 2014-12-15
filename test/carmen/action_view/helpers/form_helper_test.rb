@@ -86,6 +86,19 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     assert_equal_markup(expected, html)
   end
 
+  def test_country_select_with_code_as_option_text
+    html = country_select(:object, :country_code, :option_text => :code)
+    expected = <<-HTML
+      <select id="object_country_code" name="object[country_code]">
+        <option value="ES">ES</option>
+        <option value="EU">EU</option>
+        <option value="OC">OC</option>
+      </select>
+    HTML
+
+    assert_equal_markup(expected, html)
+  end
+
   def test_priority_country_select_deprecated_api
     html = country_select(:object, :country_code, ['ES'], {})
     expected = <<-HTML
@@ -204,6 +217,19 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
     assert_equal_markup(expected, html)
   end
 
+  def test_subregion_select_tag_with_code_as_option_text
+    oceania = Carmen::Country.coded('OC')
+    expected = <<-HTML
+      <select id="subregion_code" name="subregion_code">
+        <option value="AO">AO</option>
+      </select>
+    HTML
+
+    html = subregion_select_tag(:subregion_code, nil, oceania, :option_text => :code)
+
+    assert_equal_markup(expected, html)
+  end
+
   def test_subregion_select_tag_with_prompt
     oceania = Carmen::Country.coded('OC')
     expected = <<-HTML
@@ -247,6 +273,19 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
       <option value="EU">Eurasia</option>
     HTML
     html = region_options_for_select(regions, nil, :priority => ['ES'])
+
+    assert_equal_markup(expected, html)
+  end
+
+  def test_region_options_for_select_with_array_of_regions_priority_and_code_as_option_text
+    regions = [Carmen::Country.coded('ES'), Carmen::Country.coded('EU')]
+    expected = <<-HTML
+      <option value="ES">ES</option>
+      <option disabled>-------------</option>
+      <option value="ES">ES</option>
+      <option value="EU">EU</option>
+    HTML
+    html = region_options_for_select(regions, nil, :priority => ['ES'], :option_text => :code)
 
     assert_equal_markup(expected, html)
   end

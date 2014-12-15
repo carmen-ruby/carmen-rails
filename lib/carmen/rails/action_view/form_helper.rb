@@ -80,6 +80,9 @@ module ActionView
       def region_options_for_select(regions, selected=nil, options={})
         options.stringify_keys!
         priority_region_codes = options['priority'] || []
+        option_text_method = options['option_text']
+        option_text_method = :name unless option_text_method == :code
+
         region_options = ""
 
         unless priority_region_codes.empty?
@@ -89,7 +92,7 @@ module ActionView
 
           priority_regions = priority_region_codes.map do |code|
             region = regions.coded(code)
-            [region.name, region.code] if region
+            [region.send(option_text_method), region.code] if region
           end.compact
           unless priority_regions.empty?
             region_options += options_for_select(priority_regions, selected)
@@ -102,7 +105,7 @@ module ActionView
           end
         end
 
-        main_options = regions.map { |r| [r.name, r.code] }
+        main_options = regions.map { |r| [r.send(option_text_method), r.code] }
         main_options.sort!{|a, b| a.first.to_s <=> b.first.to_s}
         main_options.unshift [options['prompt'], ''] if options['prompt']
 
@@ -191,7 +194,10 @@ module ActionView
           add_default_name_and_id(html_options)
           priority_regions = options[:priority] || []
           value = options[:selected] ? options[:selected] : value(object)
-          opts = add_options(region_options_for_select(parent_region.subregions, value, :priority => priority_regions), options, value)
+          region_options = region_options_for_select(parent_region.subregions, value,
+                                                     :priority => priority_regions,
+                                                     :option_text => options[:option_text])
+          opts = add_options(region_options, options, value)
           content_tag("select", opts, html_options)
         end
       end
@@ -207,8 +213,9 @@ module ActionView
 
             value = options[:selected] ? options[:selected] : value(object)
             priority_regions = options[:priority] || []
-            opts = add_options(region_options_for_select(parent_region.subregions, value, 
-                                                        :priority => priority_regions), 
+            opts = add_options(region_options_for_select(parent_region.subregions, value,
+                                                        :priority => priority_regions,
+                                                        :option_text => options[:option_text]),
                                options, value)
             select = content_tag("select", opts, html_options)
             if html_options["multiple"] && options.fetch(:include_hidden, true)
