@@ -11,9 +11,6 @@ module Carmen
       }.flatten.compact
       Carmen.i18n_backend = ::I18n
       config.i18n.load_path += paths
-
-      # Enable fallbacks so that missing translations use the default locale
-      config.i18n.fallbacks = true
     end
   end
 end
