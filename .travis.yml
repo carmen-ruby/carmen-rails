@@ -1,15 +1,12 @@
 rvm:
-  - 1.9.2
   - 1.9.3
   - 2.0.0
-env:
-  - "RAILS_VERSION=3.1.0"
-  - "RAILS_VERSION=3.2.0"
-  - "RAILS_VERSION=4.0.0"
-matrix:
-  exclude:
-    - rvm: 1.9.2
-      env: "RAILS_VERSION=4.0.0"
-branches:
-  only:
-    - master
+  - 2.1.6
+  - 2.2.2
+gemfile:
+  - gemfiles/rails_3.0.gemfile
+  - gemfiles/rails_3.1.gemfile
+  - gemfiles/rails_3.2.gemfile
+  - gemfiles/rails_4.0.gemfile
+  - gemfiles/rails_4.1.gemfile
+  - gemfiles/rails_4.2.gemfile
