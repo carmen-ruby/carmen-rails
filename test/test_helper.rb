@@ -10,8 +10,8 @@ require 'rails'
 require 'carmen-rails'
 require 'ostruct'
 
-if RUBY_VERSION > "1.9.3"
-  require "byebug"
+if RUBY_VERSION > '1.9.3'
+  require 'byebug'
 else
   require 'debugger'
 end
