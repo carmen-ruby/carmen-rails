@@ -1,3 +1,7 @@
+### 1.0.2
+
+* Rails 4.2 compatibility.
+
 ### 1.0.1
 
 * Rails 4 compatibility.
