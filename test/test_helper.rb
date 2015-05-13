@@ -10,12 +10,6 @@ require 'rails'
 require 'carmen-rails'
 require 'ostruct'
 
-if RUBY_VERSION > '1.9.3'
-  require 'byebug'
-else
-  require 'debugger'
-end
-
 MiniTest::Spec.register_spec_type(/.*/, ActionView::TestCase)
 
 Carmen.clear_data_paths
