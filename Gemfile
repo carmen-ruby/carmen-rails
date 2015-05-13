@@ -2,5 +2,8 @@ source "http://rubygems.org"
 
 gemspec
 
-gem 'appraisal', "1.0.0.beta3"
-gem "debugger"
+if RUBY_VERSION > '1.9.3'
+  gem 'byebug'
+else
+  gem 'debugger'
+end

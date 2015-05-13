@@ -3,7 +3,7 @@ require 'test_helper'
 class CarmenViewHelperTest < MiniTest::Unit::TestCase
   include ActionView::Helpers::FormOptionsHelper
   include ActionView::Helpers::FormTagHelper
-  include ActionDispatch::Assertions::SelectorAssertions
+  include ActionDispatch::Assertions
 
   def setup
     @object = OpenStruct.new
@@ -12,6 +12,11 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
 
   def response_from_page
     HTML::Document.new(@html).root
+  end
+  alias :response_from_page_or_rjs :response_from_page
+
+  def document_root_element
+    Nokogiri::HTML::Document.parse(@html)
   end
 
   def test_basic_country_select
@@ -252,7 +257,7 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
   end
 
   def test_form_builder_country_select
-    form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, lambda{})
+    form = initialize_form_builder(:object, @object, self, {})
 
     html = form.country_select('attribute_name')
     expected = <<-HTML
@@ -268,14 +273,14 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
 
   def test_form_builder_selected_country
     @object.country_code = 'OC'
-    form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, lambda{})
+    form = initialize_form_builder(:object, @object, self, {})
     @html = form.country_select('country_code')
 
     assert_select('option[selected="selected"][value="OC"]')
   end
 
   def test_form_builder_country_select_deprecated_api
-    form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, lambda{})
+    form = initialize_form_builder(:object, @object, self, {})
 
     html = form.country_select('attribute_name', ['ES'])
     expected = <<-HTML
@@ -292,7 +297,7 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
   end
 
   def test_form_builder_subregion_select
-    form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, lambda{})
+    form = initialize_form_builder(:object, @object, self, {})
     html = form.subregion_select(:subregion_code, 'OC')
     expected = <<-HTML
       <select id="object_subregion_code" name="object[subregion_code]">
@@ -305,9 +310,19 @@ class CarmenViewHelperTest < MiniTest::Unit::TestCase
 
   def test_form_builder_selected_subregion
     @object.subregion_code = 'AO'
-    form = ActionView::Helpers::FormBuilder.new(:object, @object, self, {}, lambda{})
+    form = initialize_form_builder(:object, @object, self, {})
     @html = form.subregion_select(:subregion_code, 'OC')
 
     assert_select('option[selected="selected"][value="AO"]')
+  end
+
+  private
+
+  def initialize_form_builder(*args)
+    if Rails::VERSION::MAJOR < 4
+      args.push(lambda{})
+    end
+
+    ActionView::Helpers::FormBuilder.new(*args)
   end
 end

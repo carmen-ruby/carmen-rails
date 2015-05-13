@@ -9,7 +9,6 @@ require 'action_view/test_case'
 require 'rails'
 require 'carmen-rails'
 require 'ostruct'
-require 'debugger'
 
 MiniTest::Spec.register_spec_type(/.*/, ActionView::TestCase)
 
