@@ -151,7 +151,8 @@ module ActionView
       #
       # Returns an `html_safe` string containing the HTML for a select element.
       def subregion_select_tag(name, value, parent_region_or_code, options = {}, html_options = {})
-        options.stringify_keys!
+        # DD: this breaks the options: 
+        # options.stringify_keys!
         parent_region = determine_parent(parent_region_or_code)
         opts = region_options_for_select(parent_region.subregions, value, options)
         html_options = {"name" => name,
