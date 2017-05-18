@@ -103,7 +103,7 @@ module ActionView
         end
 
         main_options = regions.map { |r| [r.name, r.code] }
-        main_options.sort!{|a, b| a.first.to_s <=> b.first.to_s}
+        main_options.sort! { |a, b| a.first.to_s <=> b.first.to_s }
         main_options.unshift [options['prompt'], ''] if options['prompt']
 
         region_options += options_for_select(main_options, selected)
@@ -172,14 +172,14 @@ module ActionView
 
       def determine_parent(parent_region_or_code)
         case parent_region_or_code
-        when String
-          Carmen::Country.coded(parent_region_or_code)
-        when Array
-          parent_region_or_code.inject(Carmen::World.instance) { |parent, next_code|
-            parent.subregions.coded(next_code)
-          }
-        else
-          parent_region_or_code
+          when String
+            Carmen::Country.coded(parent_region_or_code)
+          when Array
+            parent_region_or_code.inject(Carmen::World.instance) { |parent, next_code|
+              parent.subregions.coded(next_code)
+            }
+          else
+            parent_region_or_code
         end
       end
     end
@@ -207,13 +207,36 @@ module ActionView
 
             value = options[:selected] ? options[:selected] : value(object)
             priority_regions = options[:priority] || []
-            opts = add_options(region_options_for_select(parent_region.subregions, value, 
-                                                        :priority => priority_regions), 
+            opts = add_options(region_options_for_select(parent_region.subregions, value,
+                                                         :priority => priority_regions),
                                options, value)
             select = content_tag("select", opts, html_options)
             if html_options["multiple"] && options.fetch(:include_hidden, true)
-              tag("input", :disabled => html_options["disabled"], :name => html_options["name"], 
-                           :type => "hidden", :value => "") + select
+              tag("input", :disabled => html_options["disabled"], :name => html_options["name"],
+                  :type => "hidden", :value => "") + select
+            else
+              select
+            end
+          end
+        end
+      end
+    end
+
+    if Rails::VERSION::MAJOR == 5
+      module Tags
+        class Base
+          def to_region_select_tag(parent_region, options = {}, html_options = {})
+            html_options = html_options.stringify_keys
+            add_default_name_and_id(html_options)
+            options[:include_blank] ||= true unless options[:prompt]
+
+            value = options[:selected] ? options[:selected] : value(object)
+            priority_regions = options[:priority] || []
+            opts = add_options(region_options_for_select(parent_region.subregions, value, :priority => priority_regions), options, value)
+            select = content_tag("select", opts, html_options)
+            if html_options["multiple"] && options.fetch(:include_hidden, true)
+              tag("input", :disabled => html_options["disabled"], :name => html_options["name"],
+                  :type => "hidden", :value => "") + select
             else
               select
             end
