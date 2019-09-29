@@ -210,7 +210,7 @@ module ActionView
               options[:include_blank] ||= true unless options[:prompt]
             end
 
-            value = options[:selected] ? options[:selected] : (method(:value).arity.zero? ? value : value(object))
+            value = options[:selected] ? options[:selected] : (method(:value).arity.zero? ? value() : value(object))
             priority_regions = options[:priority] || []
             opts = add_options(region_options_for_select(parent_region.subregions, value, 
                                                         :priority => priority_regions), 
