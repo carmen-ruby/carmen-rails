@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "rails"
-  s.add_dependency "carmen", "~> 1.0.0"
+  s.add_dependency "carmen", "~> 1.0"
 
   s.add_development_dependency "minitest"
 end
