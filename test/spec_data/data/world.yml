@@ -1,0 +1,13 @@
+--- 
+- alpha_2_code: OC
+  alpha_3_code: OCE
+  numeric_code: "001"
+  type: country
+- alpha_2_code: EU
+  alpha_3_code: EUR
+  numeric_code: "002"
+  type: country
+- alpha_2_code: ES
+  alpha_3_code: EST
+  numeric_code: "003"
+  type: country
