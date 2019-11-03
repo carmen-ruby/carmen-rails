@@ -1,26 +1,19 @@
+language: ruby
 rvm:
-  - 1.9.3
-  - 2.0
-  - 2.1
-  - 2.2
-  - 2.3
-  - 2.4
+  - 2.3.8
+  - 2.4.9
   - 2.5
   - 2.6
-env:
-  - "RAILS_VERSION=3.1.0"
-  - "RAILS_VERSION=3.2.0"
-  - "RAILS_VERSION=4.0.0"
-  - "RAILS_VERSION=4.1.0"
-  - "RAILS_VERSION=4.3.0"
-  - "RAILS_VERSION=5.0.0"
-  - "RAILS_VERSION=5.1.0"
-  - "RAILS_VERSION=5.2.0"
-  - "RAILS_VERSION=6.0.0"
+gemfile:
+  - gemfiles/rails_4.1.gemfile
+  - gemfiles/rails_4.2.gemfile
+  - gemfiles/rails_5.0.gemfile
+  - gemfiles/rails_5.1.gemfile
+  - gemfiles/rails_5.2.gemfile
+  - gemfiles/rails_6.0.gemfile
 matrix:
   exclude:
-    - rvm: 1.9.2
-      env: "RAILS_VERSION=3.1.0"
-branches:
-  only:
-    - master
+    - rvm: 2.3.8
+      gemfile: gemfiles/rails_6.0.gemfile
+    - rvm: 2.4.9
+      gemfile: gemfiles/rails_6.0.gemfile
