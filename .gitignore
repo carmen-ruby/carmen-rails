@@ -1,4 +1,5 @@
 .bundle/
+.idea/
 log/*.log
 pkg/
 Gemfile.lock

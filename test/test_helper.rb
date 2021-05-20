@@ -9,20 +9,19 @@ require 'action_view/test_case'
 require 'rails'
 require 'carmen-rails'
 require 'ostruct'
-require 'debugger'
 
 MiniTest::Spec.register_spec_type(/.*/, ActionView::TestCase)
 
 Carmen.clear_data_paths
 
-carmen_path = File.expand_path('../../../carmen', __FILE__)
+carmen_path = File.expand_path('..', __FILE__)
 
 Carmen.append_data_path(carmen_path + '/spec_data/data')
 
 locale_path = carmen_path + '/spec_data/locale'
 Carmen.i18n_backend = Carmen::I18n::Simple.new(locale_path)
 
-class MiniTest::Unit::TestCase
+class MiniTest::Test
   def assert_equal_markup(expected, actual, message=nil)
     assert_equal(clean_markup(expected), clean_markup(actual), message)
   end
