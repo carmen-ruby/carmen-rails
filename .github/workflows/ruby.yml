@@ -1,0 +1,32 @@
+name: Ruby Gem
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    types: [ opened, synchronize, reopened, edited, ready_for_review ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        ruby-version: ['2.7', '3.0', '3.1']
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - name: Install Appraisal dependencies
+        run: bundle exec appraisal install
+
+      - name: Run Appraisals
+        run: bundle exec appraisal rake

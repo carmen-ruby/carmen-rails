@@ -2,4 +2,4 @@ source "http://rubygems.org"
 
 gemspec
 
-gem 'appraisal', "2.2.0"
+gem 'appraisal', "2.4.1"
