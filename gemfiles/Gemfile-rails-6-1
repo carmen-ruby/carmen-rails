@@ -1,8 +1,7 @@
 source 'https://rubygems.org'
 
-gemspec
+gemspec path: '..'
 
-gem 'pry'
-gem 'rails', '~> 7.1.0'
+gem 'rails', '~> 6.1.0'
 gem 'sprockets', '~> 4.0'
 gem 'test-unit', '~> 3.0'

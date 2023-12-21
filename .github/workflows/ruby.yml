@@ -1,32 +1,72 @@
-name: Ruby Gem
-
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    types: [ opened, synchronize, reopened, edited, ready_for_review ]
-
+name: Test
+on: [push, pull_request]
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
+  test:
     strategy:
+      fail-fast: false
       matrix:
-        ruby-version: ['2.7', '3.0', '3.1']
-
+        gemfile:
+          - Gemfile
+          - gemfiles/Gemfile-rails-7-0
+          - gemfiles/Gemfile-rails-6-1
+          - gemfiles/Gemfile-rails-6-0
+          - gemfiles/Gemfile-rails-5-2
+          - gemfiles/Gemfile-rails-5-1
+          - gemfiles/Gemfile-rails-5-0
+        ruby:
+          - '3.2'
+          - '3.1'
+          - '3.0'
+          - '2.7'
+          - '2.6'
+          - '2.5'
+        exclude:
+          - gemfile: Gemfile
+            ruby: '2.6'
+          - gemfile: Gemfile
+            ruby: '2.5'
+          - gemfile: gemfiles/Gemfile-rails-7-0
+            ruby: '2.6'
+          - gemfile: gemfiles/Gemfile-rails-7-0
+            ruby: '2.5'
+          - gemfile: gemfiles/Gemfile-rails-6-0
+            ruby: '3.2'
+          - gemfile: gemfiles/Gemfile-rails-6-0
+            ruby: '3.1'
+          - gemfile: gemfiles/Gemfile-rails-5-2
+            ruby: '3.2'
+          - gemfile: gemfiles/Gemfile-rails-5-2
+            ruby: '3.1'
+          - gemfile: gemfiles/Gemfile-rails-5-2
+            ruby: '3.0'
+          - gemfile: gemfiles/Gemfile-rails-5-2
+            ruby: '2.7'
+          - gemfile: gemfiles/Gemfile-rails-5-1
+            ruby: '3.2'
+          - gemfile: gemfiles/Gemfile-rails-5-1
+            ruby: '3.1'
+          - gemfile: gemfiles/Gemfile-rails-5-1
+            ruby: '3.0'
+          - gemfile: gemfiles/Gemfile-rails-5-1
+            ruby: '2.7'
+          - gemfile: gemfiles/Gemfile-rails-5-0
+            ruby: '3.2'
+          - gemfile: gemfiles/Gemfile-rails-5-0
+            ruby: '3.1'
+          - gemfile: gemfiles/Gemfile-rails-5-0
+            ruby: '3.0'
+          - gemfile: gemfiles/Gemfile-rails-5-0
+            ruby: '2.7'
+    runs-on: ubuntu-latest
+    env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
+      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
     steps:
       - uses: actions/checkout@v3
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ matrix.ruby-version }}
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-
-      - name: Install Appraisal dependencies
-        run: bundle exec appraisal install
-
-      - name: Run Appraisals
-        run: bundle exec appraisal rake
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true # runs bundle install and caches installed gems automatically
+      - name: Install
+        run: gem install bundler -v 2.3.26
+      - name: Run tests
+        run: bundle exec rake

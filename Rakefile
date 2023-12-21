@@ -1,4 +1,4 @@
-require "rubygems"
+require 'rubygems'
 require 'bundler/setup'
 
 require 'rake'
@@ -15,4 +15,4 @@ Rake::TestTask.new(:test) do |t|
 end
 
 desc 'Default: run unit tests.'
-task :default => :test
+task default: :test
