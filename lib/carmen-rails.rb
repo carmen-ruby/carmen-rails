@@ -1,4 +1,5 @@
 require 'carmen'
+require 'carmen/rails/region_select_tag'
 require 'carmen/rails/action_view/form_helper'
 require 'carmen/rails/version'
 
